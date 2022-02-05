@@ -19,6 +19,8 @@ public class Loader {
 	public Model loadToVAO(float[] positions) {
 		int vaoID = createVAO();
 		// Data is in attribList 0!
+		// AttribLists are all the attributes that a vertex contains, like the position or the color of the vertex
+		// So with this function we are inputting basic configurations for the attributes, like the size of the vertices(x,y,z)
 		storeDataInAttribList(0, positions);
 		unbindVAO();
 		// 3 because each vertex has 3 floats (AKA: positions) which are: X,Y,Z
@@ -31,6 +33,7 @@ public class Loader {
 		int vaoID = GL30.glGenVertexArrays();
 		vaos.add(vaoID);
 		// Activates it (Binds it to a vertex array)
+		// Makes the new array active, creating it if necessary
 		GL30.glBindVertexArray(vaoID);
 		return vaoID;
 	}
@@ -45,10 +48,10 @@ public class Loader {
 		FloatBuffer buffer = storeDataInFloatBuffer(data);
 		// Lets OpenGL know that we will never change data from this buffer, to just draw it on screen basically.
 		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
+		// Specifies the properties of the attribList
 		// The number of the attribute, length of each vertex (x,y,z), type of data, normalized, any other data between vertices?(like positions, and colors and stuff), start at where in data?
 		GL30.glVertexAttribPointer(attribNumber, 3, GL11.GL_FLOAT, false, 0, 0);
 		GL30.glBindBuffer(GL30.GL_ARRAY_BUFFER, 0);
-		
 	}
 	
 	private void unbindVAO() {
