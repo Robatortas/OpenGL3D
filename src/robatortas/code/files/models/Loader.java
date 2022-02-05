@@ -1,6 +1,7 @@
 package robatortas.code.files.models;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,15 +17,16 @@ public class Loader {
 	private List<Integer> vbos = new ArrayList<Integer>();
 	
 	// Takes in positions of the model's vertices and returns info as a Model Object.
-	public Model loadToVAO(float[] positions) {
+	public Model loadToVAO(float[] positions, int[] indices) {
 		int vaoID = createVAO();
 		// Data is in attribList 0!
 		// AttribLists are all the attributes that a vertex contains, like the position or the color of the vertex
 		// So with this function we are inputting basic configurations for the attributes, like the size of the vertices(x,y,z)
 		storeDataInAttribList(0, positions);
+		bindIndicesBuffer(indices);
 		unbindVAO();
 		// 3 because each vertex has 3 floats (AKA: positions) which are: X,Y,Z
-		return new Model(vaoID, positions.length/3);
+		return new Model(vaoID, indices.length);
 	}
 	
 	// Creates a new VAO
@@ -57,6 +59,28 @@ public class Loader {
 	private void unbindVAO() {
 		// 0 = unbind
 		GL30.glBindVertexArray(0);
+	}
+	
+	// Still trying to understand it
+	public void bindIndicesBuffer(int[] indices) {
+		// Creates Buffer
+		int vboID = GL30.glGenBuffers();
+		// Adds it to the vbo management list
+		vbos.add(vboID);
+		// Binds the buffer (Makes it usable/active)
+		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vboID);
+		// Creates a new BufferInt with the storeDataInIntBuffer function, inputing the indices
+		IntBuffer buffer = storeDataInIntBuffer(indices);
+		// Creates Buffer Data
+		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
+		
+	}
+	
+	private IntBuffer storeDataInIntBuffer(int[] data) {
+		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
 	}
 	
 	private FloatBuffer storeDataInFloatBuffer(float[] data) {

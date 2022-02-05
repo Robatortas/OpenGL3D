@@ -50,13 +50,39 @@ public class DisplayManager {
 		
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, 1);
 		
+		/* INDICES
+		 * 
+		 * (1 connects with 3**)
+		 * 
+		 * 
+		 * 		0	_______  3
+		 * 		|   |    /|	 |
+		 * 	    |   |   / |	 |
+		 * 	    |   |  /  |	 |
+		 *	    V   | /   |	 V
+		 *	    1   |/____|  2
+		 *		------------>
+		 */
+		
+		// Vertices
 		float[] vertices = {
-			-0.5f, 0.5f, 0f,
-			-0.5f, -0.5f, 0f,
-			0.5f, -0.5f, 0f
+			// 0
+			-0.5f, 0.5f, 0,
+			// 1
+			-0.5f, -0.5f, 0,
+			// 3
+			0.5f, -0.5f, 0,
+			// 1 && 2 (connects 1 with 2)
+			0.5f, 0.5f, 0
 		};
 		
-		Model model = loader.loadToVAO(vertices);
+		// Marks where each vertex is (in a weird way to bind them :D)
+		int[] indices = {
+				0, 1, 3,
+				3, 1, 2
+		};
+		
+		Model model = loader.loadToVAO(vertices, indices);
 		
 		while(!shouldClose()) {
 			renderer.update();

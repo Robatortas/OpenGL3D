@@ -17,8 +17,8 @@ public class Renderer {
 		GL30.glBindVertexArray(model.getVaoID());
 		// Activates attribList where data is stored
 		GL30.glEnableVertexAttribArray(0);
-		// Draws arrays
-		GL30.glDrawArrays(GL30.GL_TRIANGLES, 0, model.getVertexCount());
+		// Draws elements
+		GL30.glDrawElements(GL30.GL_TRIANGLES, model.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
 		// Disables attrib list once we're done on attribList 0
 		GL30.glDisableVertexAttribArray(0);
 		// Deselects the array
