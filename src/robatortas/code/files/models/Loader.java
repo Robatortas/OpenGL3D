@@ -61,7 +61,7 @@ public class Loader {
 		GL30.glBindVertexArray(0);
 	}
 	
-	// Still trying to understand it
+	// Does the same as the attribList function, but for Buffer Indices
 	public void bindIndicesBuffer(int[] indices) {
 		// Creates Buffer
 		int vboID = GL30.glGenBuffers();

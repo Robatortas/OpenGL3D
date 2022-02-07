@@ -7,13 +7,14 @@ import org.lwjgl.system.MemoryUtil;
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.Renderer;
+import robatortas.code.files.shaders.java.StaticShader;
 
 public class DisplayManager {
 	
 	public long window;
 	
-	private int WIDTH = 300;
-	private int HEIGHT = 300;
+	private int WIDTH = 720;
+	private int HEIGHT = 400;
 	
 	public Loader loader = new Loader();
 	public Renderer renderer = new Renderer();
@@ -24,6 +25,7 @@ public class DisplayManager {
 	
 	public void window() {
 		GLFW.glfwInit();
+		
 		
 		window = GLFW.glfwCreateWindow(getWidth(), getHeight(), "OPENGL3D", MemoryUtil.NULL, MemoryUtil.NULL);
 		
@@ -55,8 +57,8 @@ public class DisplayManager {
 		 * (1 connects with 3**)
 		 * 
 		 * 
-		 * 		0	_______  3
-		 * 		|   |    /|	 |
+		 * 		0	_______	 3
+		 * 		|	|    /|	 |
 		 * 	    |   |   / |	 |
 		 * 	    |   |  /  |	 |
 		 *	    V   | /   |	 V
@@ -81,22 +83,30 @@ public class DisplayManager {
 				0, 1, 3,
 				3, 1, 2
 		};
+		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, indices);
 		
 		while(!shouldClose()) {
 			renderer.update();
+			shader.start();
 			renderer.render(model);
+			shader.stop();
 			update();
 		}
 		
 		clean();
+//		shader.cleanup();
 	}
 	
 	public void update() {
 //		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 		GLFW.glfwSwapBuffers(window);
 		GLFW.glfwPollEvents();
+	}
+	
+	public void render() {
+		
 	}
 	
 	public boolean shouldClose() {
