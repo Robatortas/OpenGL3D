@@ -15,5 +15,6 @@ public class StaticShader extends ShaderProgram {
 		// 0 because our VAO is located on 0
 		// "position" so OpenGL knows what the in position is on the shader file
 		super.bindAttrib(0, "position");
+		super.bindAttrib(1, "textureCoords");
 	}
 }

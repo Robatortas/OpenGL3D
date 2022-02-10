@@ -1,7 +1,10 @@
-package robatortas.code.files.models;
+package robatortas.code.files;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+
+import robatortas.code.files.models.Model;
+import robatortas.code.files.models.TexturedModel;
 
 public class Renderer {
 	
@@ -13,14 +16,19 @@ public class Renderer {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 	}
 	
-	public void render(Model model) {
+	public void render(TexturedModel texturedModel) {
+		Model model = texturedModel.getModel();
 		GL30.glBindVertexArray(model.getVaoID());
 		// Activates attribList where data is stored
 		GL30.glEnableVertexAttribArray(0);
+		GL30.glEnableVertexAttribArray(1);
+		GL30.glActiveTexture(GL30.GL_TEXTURE0);
+		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texturedModel.getTexture().getID());
 		// Draws elements
 		GL30.glDrawElements(GL30.GL_TRIANGLES, model.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
 		// Disables attrib list once we're done on attribList 0
 		GL30.glDisableVertexAttribArray(0);
+		GL30.glDisableVertexAttribArray(1);
 		// Deselects the array
 		GL30.glBindVertexArray(0);
 	}

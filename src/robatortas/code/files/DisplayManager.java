@@ -6,8 +6,9 @@ import org.lwjgl.system.MemoryUtil;
 
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
-import robatortas.code.files.models.Renderer;
+import robatortas.code.files.models.TexturedModel;
 import robatortas.code.files.shaders.java.StaticShader;
+import robatortas.code.files.textures.ModelTexture;
 
 public class DisplayManager {
 	
@@ -84,14 +85,23 @@ public class DisplayManager {
 				3, 1, 2
 		};
 		
+		float[] uvMapping = {
+				0, 0, // V0
+				0, 1, // V1
+				1, 1, // V2
+				1, 0 // V3
+		};
+		
 		StaticShader shader = new StaticShader();
 		
-		Model model = loader.loadToVAO(vertices, indices);
+		Model model = loader.loadToVAO(vertices, uvMapping, indices);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/face.png"));
+		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!shouldClose()) {
 			renderer.update();
 			shader.start();
-			renderer.render(model);
+			renderer.render(texturedModel);
 			shader.stop();
 			update();
 		}
