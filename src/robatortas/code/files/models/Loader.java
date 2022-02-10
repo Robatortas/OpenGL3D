@@ -59,6 +59,18 @@ public class Loader {
 			data[i] = a<<24|b<<16|g<<8|r;
 		}
 		
+		int texture = GL30.glGenTextures();
+		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texture);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D_ARRAY, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST);
+		
+		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, texture, storeDataInIntBuffer(data));
+		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
+		
+		return texture;
+	}
+	
+	public int getTextureID() {
+		//TODO: INPUT VALUE LATER!!
 		return 0;
 	}
 	
