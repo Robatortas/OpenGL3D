@@ -14,7 +14,7 @@ public abstract class ShaderProgram {
 	private int fragmentShaderID;
 	
 	public ShaderProgram(String vertexFile, String fragmentFile) {
-		// Loads Shaders
+		// Loads Shaders with the file directories
 		vertexShaderID = loadShader(vertexFile, GL30.GL_VERTEX_SHADER);
 		fragmentShaderID = loadShader(fragmentFile, GL30.GL_FRAGMENT_SHADER);
 		// Creates Shader program

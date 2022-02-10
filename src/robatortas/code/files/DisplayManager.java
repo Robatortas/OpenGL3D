@@ -83,6 +83,7 @@ public class DisplayManager {
 				0, 1, 3,
 				3, 1, 2
 		};
+		
 		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, indices);

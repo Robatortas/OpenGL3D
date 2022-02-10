@@ -8,10 +8,8 @@ in vec3 position;
 out vec3 color;
 
 void main(void){
-
 	// Tells OpenGL the positions of each vertex in the VAO
 	gl_Position = vec4(position.x, position.y, position.z, 1.0);
 	// Color of each vertex
-	color = vec3(position.x+0.5, 1.0, position.y+0.5);
-
+	color = vec3(position.x+0.5, 0.4, position.y+0.5);
 }

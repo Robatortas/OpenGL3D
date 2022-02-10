@@ -1,9 +1,13 @@
 package robatortas.code.files.models;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -27,6 +31,35 @@ public class Loader {
 		unbindVAO();
 		// 3 because each vertex has 3 floats (AKA: positions) which are: X,Y,Z
 		return new Model(vaoID, indices.length);
+	}
+	
+	public int width, height;
+	
+	public int loadTexture(String path) {
+		int pixels[] = null;
+		
+		try {
+			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
+			width = image.getWidth();
+			height = image.getHeight();
+			pixels = new int[width*height];
+			image.setRGB(0, 0, width, height, pixels, 0, width);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Convert image data to usable OpenGL data
+		int[] data = new int[width*height];
+		for(int i = 0; i < width*height;i++) {
+			// each hex number = 4 bits
+			int a = (pixels[i] & 0xff000000) >> 24;
+			int r = (pixels[i] & 0xff000000) >> 16;
+			int g = (pixels[i] & 0xff000000) >> 8;
+			int b = 0;
+			data[i] = a<<24|b<<16|g<<8|r;
+		}
+		
+		return 0;
 	}
 	
 	// Creates a new VAO
