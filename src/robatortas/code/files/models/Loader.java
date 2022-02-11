@@ -1,10 +1,7 @@
 package robatortas.code.files.models;
 
 import java.awt.image.BufferedImage;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -16,9 +13,6 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-import org.newdawn.slick.util.BufferedImageUtil;
 
 public class Loader {
 	
@@ -48,19 +42,46 @@ public class Loader {
 	
 	// Loads texture
 	public int loadTexture(String path) {
-		int pixels[] = null;
 		
-		Texture texture = null;
+//		BufferedImage image = null;
+//		
+//		try {
+//			image = ImageIO.read(Loader.class.getResource(path));
+//			width = image.getWidth();
+//			height = image.getHeight();
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		int[] pixels = image.getRGB(0, 0, width, height, null, 0, width);
+//		
+//		ByteBuffer buffer = BufferUtils.createByteBuffer((width*height)*3);
+//		texture = GL30.glGenTextures();
+//		
+//		for(int i = 0; i < pixels.length; i++) {
+//			byte r = (byte)((pixels[i] >> 16) & 0xff0000);
+//			byte g = (byte)((pixels[i] >> 8) & 0xff00);
+//			byte b = (byte)((pixels[i]) & 0xff);
+//			
+//			buffer.put(r);
+//			buffer.put(g);
+//			buffer.put(b);
+//		}
+//		
+//		buffer.flip();
 		
-		try {
-			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
-//			texture = TextureLoader.getTexture("PNG", new FileInputStream("res/textures/" + path + ".png"));
-			texture = BufferedImageUtil.getTexture("PNG", image);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+//		Texture texture = null;
+//		
+//		try {
+////			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
+//			texture = TextureLoader.getTexture("PNG", new FileInputStream(path));
+////			texture = BufferedImageUtil.getTexture("PNG", image);
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 		// OTHER METHOD, deprecated
 		/*
@@ -92,11 +113,46 @@ public class Loader {
 		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
 		*/
-		int textureID = texture.getTextureID();
 		
-		textures.add(textureID);
+		int[] pixels = null;
 		
-		return textureID;
+		try {
+			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
+			width = image.getWidth();
+			height = image.getHeight();
+			pixels = new int[width*height];
+			image.setRGB(0, 0, width, height, pixels, 0, width);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Convert image data to usable OpenGL data
+		int[] data = new int[width*height];
+		for(int i = 0; i < width*height; i++) {
+			// each hex number = 4 bits
+			int a = (pixels[i] & 0xff000000) >> 24;
+			int r = (pixels[i] & 0xff0000) >> 16;
+			int g = (pixels[i] & 0xff00) >> 8;
+			int b = (pixels[i] & 0xff);
+			
+			data[i] = a<<24|b<<16|g<<8|r;
+		}
+		
+		// Generate texture
+		texture = GL30.glGenTextures();
+		// Bind texture
+		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texture);
+		// Texture parameters
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_NEAREST);
+		
+		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
+		// Unbind texture
+		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
+		
+		textures.add(texture);
+		
+		return texture;
 	}
 	
 	public int getTextureID() {

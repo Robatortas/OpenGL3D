@@ -13,7 +13,7 @@ public class Renderer {
 	// Prepares OpenGL to render game
 	public void update() {
 		GL11.glClearColor(1, 0, 0, 1);
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		GL11.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
 	}
 	
 	public void render(TexturedModel texturedModel) {

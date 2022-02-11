@@ -2,6 +2,7 @@ package robatortas.code.files;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 
 import robatortas.code.files.models.Loader;
@@ -92,10 +93,17 @@ public class DisplayManager {
 				1, 0 // V3
 		};
 		
+		GL30.glEnable(GL30.GL_DEPTH_TEST);
+		GL30.glActiveTexture(GL30.GL_TEXTURE1);
+		GL30.glEnable(GL30.GL_BLEND);
+		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+		
+		GL30.glEnable(GL30.GL_TEXTURE_2D);
+		
 		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, uvMapping, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/face.png"));
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/wonder-day-among-us-21.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!shouldClose()) {
@@ -107,7 +115,7 @@ public class DisplayManager {
 		}
 		
 		clean();
-//		shader.cleanup();
+		shader.cleanup();
 	}
 	
 	public void update() {
