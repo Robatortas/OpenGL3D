@@ -15,8 +15,8 @@ public class DisplayManager {
 	
 	public long window;
 	
-	private int WIDTH = 720;
-	private int HEIGHT = 400;
+	private int WIDTH = 1024;
+	private int HEIGHT = 720;
 	
 	public Loader loader = new Loader();
 	public Renderer renderer = new Renderer();
@@ -54,12 +54,14 @@ public class DisplayManager {
 		
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, 1);
 		
+		vSync(1);
+		
 		/* INDICES
 		 * 
 		 * (1 connects with 3**)
 		 * 
 		 * 
-		 * 		0	_______	 3
+		 * 		0	______   3
 		 * 		|	|    /|	 |
 		 * 	    |   |   / |	 |
 		 * 	    |   |  /  |	 |
@@ -114,6 +116,8 @@ public class DisplayManager {
 			update();
 		}
 		
+		destroyWindow();
+		
 		clean();
 		shader.cleanup();
 	}
@@ -126,6 +130,18 @@ public class DisplayManager {
 	
 	public void render() {
 		
+	}
+	
+	public void vSync(int interval) {
+		GLFW.glfwSwapInterval(interval);
+	}
+	
+	public void destroyWindow() {
+		GL.destroy();
+		// Destroys window and it's components
+		GLFW.glfwDestroyWindow(window);
+		// Terminates GLFW library
+		GLFW.glfwTerminate();
 	}
 	
 	public boolean shouldClose() {

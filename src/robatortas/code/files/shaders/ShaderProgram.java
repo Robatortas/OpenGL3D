@@ -3,15 +3,22 @@ package robatortas.code.files.shaders;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
 
 public abstract class ShaderProgram {
 	
 	private int programID;
 	private int vertexShaderID;
 	private int fragmentShaderID;
+	
+	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4*4);
 	
 	public ShaderProgram(String vertexFile, String fragmentFile) {
 		// Loads Shaders with the file directories
@@ -118,7 +125,21 @@ public abstract class ShaderProgram {
 	}
 	
 	// Loads a vector from a shader class for usability in java
-	protected void loadVector(int location/*, Vector3f vector*/) {
-		
+	protected void loadVector(int location, Vector3f vector) {
+		GL30.glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+	
+	protected void loadBoolean(int location, boolean value) {
+		float toLoad = 0;
+		if(value) {
+			toLoad = 1;
+		}
+		GL30.glUniform1f(location, toLoad);
+	}
+	
+	protected void loadMatrix(int location, Matrix4f matrix) {
+		matrix.get(matrixBuffer);
+		matrixBuffer.flip();
+		GL30.glUniformMatrix4fv(location, false, matrixBuffer);
 	}
 }

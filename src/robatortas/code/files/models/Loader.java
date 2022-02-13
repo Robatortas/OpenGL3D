@@ -138,7 +138,6 @@ public class Loader {
 		IntBuffer buffer = bufferUtils.createIntBuffer(indices);
 		// Creates Buffer Data
 		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
-		
 	}
 	
 	// Cleans VAOs and VBOs
