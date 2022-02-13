@@ -2,6 +2,7 @@ package robatortas.code.files.models;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -42,86 +43,14 @@ public class Loader {
 	
 	// Loads texture
 	public int loadTexture(String path) {
-		
-//		BufferedImage image = null;
-//		
-//		try {
-//			image = ImageIO.read(Loader.class.getResource(path));
-//			width = image.getWidth();
-//			height = image.getHeight();
-//			
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		int[] pixels = image.getRGB(0, 0, width, height, null, 0, width);
-//		
-//		ByteBuffer buffer = BufferUtils.createByteBuffer((width*height)*3);
-//		texture = GL30.glGenTextures();
-//		
-//		for(int i = 0; i < pixels.length; i++) {
-//			byte r = (byte)((pixels[i] >> 16) & 0xff0000);
-//			byte g = (byte)((pixels[i] >> 8) & 0xff00);
-//			byte b = (byte)((pixels[i]) & 0xff);
-//			
-//			buffer.put(r);
-//			buffer.put(g);
-//			buffer.put(b);
-//		}
-//		
-//		buffer.flip();
-		
-		
-//		Texture texture = null;
-//		
-//		try {
-////			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
-//			texture = TextureLoader.getTexture("PNG", new FileInputStream(path));
-////			texture = BufferedImageUtil.getTexture("PNG", image);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-		
-		// OTHER METHOD, deprecated
-		/*
-		try {
-			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
-			width = image.getWidth();
-			height = image.getHeight();
-			pixels = new int[width*height];
-			image.setRGB(0, 0, width, height, pixels, 0, width);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		// Convert image data to usable OpenGL data
-		int[] data = new int[width*height];
-		for(int i = 0; i < width*height; i++) {
-			// each hex number = 4 bits
-			int a = (pixels[i] & 0xff000000) >> 24;
-			int r = (pixels[i] & 0xff0000) >> 16;
-			int g = (pixels[i] & 0xff00) >> 8;
-			int b = (pixels[i] & 0xff);
-			data[i] = a<<24|b<<16|g<<8|r;
-		}
-		
-		texture = GL30.glGenTextures();
-		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texture);
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D_ARRAY, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST);
-		
-		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
-		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
-		*/
-		
 		int[] pixels = null;
 		
 		try {
-			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
+			BufferedImage image = ImageIO.read(Loader.class.getResource("/textures/face.png"));
 			width = image.getWidth();
 			height = image.getHeight();
 			pixels = new int[width*height];
-			image.setRGB(0, 0, width, height, pixels, 0, width);
+			image.getRGB(0, 0, width, height, pixels, 0, width);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -135,7 +64,7 @@ public class Loader {
 			int g = (pixels[i] & 0xff00) >> 8;
 			int b = (pixels[i] & 0xff);
 			
-			data[i] = a<<24|b<<16|g<<8|r;
+			data[i] = a<<24|b<<16|g<<8|r; // a<<24|b<<16|g<<8|r
 		}
 		
 		// Generate texture
@@ -143,14 +72,16 @@ public class Loader {
 		// Bind texture
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texture);
 		// Texture parameters
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST);
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_NEAREST);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_LINEAR);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_LINEAR);
 		
-		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
+		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGB, width, height, 0, GL30.GL_BGRA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
 		// Unbind texture
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
 		
 		textures.add(texture);
+		
+		System.out.println(storeDataInIntBuffer(data));
 		
 		return texture;
 	}
@@ -210,6 +141,13 @@ public class Loader {
 	
 	private IntBuffer storeDataInIntBuffer(int[] data) {
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
+	}
+	
+	private ByteBuffer storeDataInByteBuffer(byte[] data) {
+		ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;

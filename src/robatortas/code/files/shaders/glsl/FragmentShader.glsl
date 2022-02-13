@@ -7,6 +7,8 @@ in vec2 passTextureCoords;
 // The color that will be outputted
 out vec4 out_Color;
 
+in vec3 color;
+
 uniform sampler2D textureSampler;
 
 void main(void) {
@@ -15,4 +17,8 @@ void main(void) {
 
 	// Returns color of the pixel on the texture at the coords that we give it
 	out_Color = texture(textureSampler, passTextureCoords);
+
+	// Fill
+//	out_Color = vec4(color, 1.0);
+
 }

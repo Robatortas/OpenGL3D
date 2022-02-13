@@ -24,11 +24,13 @@ public class Renderer {
 		GL30.glEnableVertexAttribArray(1);
 		GL30.glActiveTexture(GL30.GL_TEXTURE0);
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texturedModel.getTexture().getID());
+//		GL30.glEnable(GL30.GL_TEXTURE_2D); 
 		// Draws elements
 		GL30.glDrawElements(GL30.GL_TRIANGLES, model.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
 		// Disables attrib list once we're done on attribList 0
 		GL30.glDisableVertexAttribArray(0);
 		GL30.glDisableVertexAttribArray(1);
+//		GL30.glDisable(GL30.GL_TEXTURE_2D);
 		// Deselects the array
 		GL30.glBindVertexArray(0);
 	}
