@@ -2,7 +2,6 @@ package robatortas.code.files.models;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -10,12 +9,15 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
 
+import robatortas.code.files.utils.MyBufferUtils;
+
 public class Loader {
+	
+	public MyBufferUtils bufferUtils = new MyBufferUtils();
 	
 	// Lists to keep track of VAOs and VBOs so we can delete them once the program closes
 	private List<Integer> vaos = new ArrayList<Integer>();
@@ -45,8 +47,9 @@ public class Loader {
 	public int loadTexture(String path) {
 		int[] pixels = null;
 		
+		// Typical BufferedImage code
 		try {
-			BufferedImage image = ImageIO.read(Loader.class.getResource("/textures/face.png"));
+			BufferedImage image = ImageIO.read(Loader.class.getResource(path));
 			width = image.getWidth();
 			height = image.getHeight();
 			pixels = new int[width*height];
@@ -72,22 +75,21 @@ public class Loader {
 		// Bind texture
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texture);
 		// Texture parameters
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_LINEAR);
-		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_LINEAR);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MIN_FILTER, GL30.GL_NEAREST);
+		GL30.glTexParameteri(GL30.GL_TEXTURE_2D, GL30.GL_TEXTURE_MAG_FILTER, GL30.GL_NEAREST);
 		
-		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGB, width, height, 0, GL30.GL_BGRA, GL30.GL_UNSIGNED_BYTE, storeDataInIntBuffer(data));
+		// Tells OpenGL how it's going to receive image data
+		GL30.glTexImage2D(GL30.GL_TEXTURE_2D, 0, GL30.GL_RGBA, width, height, 0, GL30.GL_RGBA, GL30.GL_UNSIGNED_BYTE, bufferUtils.createIntBuffer(data));
 		// Unbind texture
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
 		
+		// Adds the texture to the textures list
 		textures.add(texture);
-		
-		System.out.println(storeDataInIntBuffer(data));
-		
+				
 		return texture;
 	}
 	
 	public int getTextureID() {
-		//TODO: INPUT VALUE LATER!!
 		return texture;
 	}
 	
@@ -110,7 +112,7 @@ public class Loader {
 		// Selects it basically
 		// GL30.GL_ARRAY_BUFFER specifies what kind of VBO it's going to be
 		GL30.glBindBuffer(GL15.GL_ARRAY_BUFFER, vboID);
-		FloatBuffer buffer = storeDataInFloatBuffer(data);
+		FloatBuffer buffer = bufferUtils.createFloatBuffer(data);
 		// Lets OpenGL know that we will never change data from this buffer, to just draw it on screen basically.
 		GL30.glBufferData(GL30.GL_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
 		// Specifies the properties of the attribList
@@ -133,33 +135,10 @@ public class Loader {
 		// Binds the buffer (Makes it usable/active)
 		GL30.glBindBuffer(GL30.GL_ELEMENT_ARRAY_BUFFER, vboID);
 		// Creates a new BufferInt with the storeDataInIntBuffer function, inputing the indices
-		IntBuffer buffer = storeDataInIntBuffer(indices);
+		IntBuffer buffer = bufferUtils.createIntBuffer(indices);
 		// Creates Buffer Data
 		GL30.glBufferData(GL30.GL_ELEMENT_ARRAY_BUFFER, buffer, GL30.GL_STATIC_DRAW);
 		
-	}
-	
-	private IntBuffer storeDataInIntBuffer(int[] data) {
-		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
-		buffer.put(data);
-		buffer.flip();
-		return buffer;
-	}
-	
-	private ByteBuffer storeDataInByteBuffer(byte[] data) {
-		ByteBuffer buffer = BufferUtils.createByteBuffer(data.length);
-		buffer.put(data);
-		buffer.flip();
-		return buffer;
-	}
-	
-	private FloatBuffer storeDataInFloatBuffer(float[] data) {
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
-		// Puts data in buffer
-		buffer.put(data);
-		// We finished writing to it and prepares to be read from
-		buffer.flip();
-		return buffer;
 	}
 	
 	// Cleans VAOs and VBOs

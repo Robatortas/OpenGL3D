@@ -22,11 +22,21 @@ public abstract class ShaderProgram {
 		// Attaches shaders into program
 		GL30.glAttachShader(programID, vertexShaderID);
 		GL30.glAttachShader(programID, fragmentShaderID);
+		// Binds the attributes to the VAO
+		bindAttribs();
 		// Links program
 		GL30.glLinkProgram(programID);
 		//Validates the program
 		// Checks to see wether the executables contained in program can execute
 		GL30.glValidateProgram(programID);
+		getAllUniformLocations();
+	}
+	
+	protected abstract void getAllUniformLocations();
+	
+	// Gets the uniform location from the shader classes
+	public int getUniformLocation(String uniformName) {
+		return GL30.glGetUniformLocation(programID, uniformName);
 	}
 	
 	// When you want to use the program.
@@ -100,5 +110,15 @@ public abstract class ShaderProgram {
 			System.exit(0);
 		}
 		return shaderID;
+	}
+	
+	// Loads a float from a shader class for usability in java
+	protected void loadFloat(int location, float value) {
+		GL30.glUniform1f(location, value);
+	}
+	
+	// Loads a vector from a shader class for usability in java
+	protected void loadVector(int location/*, Vector3f vector*/) {
+		
 	}
 }

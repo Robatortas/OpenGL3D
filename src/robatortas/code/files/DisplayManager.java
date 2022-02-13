@@ -103,7 +103,7 @@ public class DisplayManager {
 		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, uvMapping, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/wonder-day-among-us-21.png")); ///textures/wonder-day-among-us-21.png
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/chicken.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		while(!shouldClose()) {
