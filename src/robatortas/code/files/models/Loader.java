@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.stb.STBImage;
 
 import robatortas.code.files.utils.MyBufferUtils;
 
@@ -69,6 +70,8 @@ public class Loader {
 			
 			data[i] = a<<24|b<<16|g<<8|r; // a<<24|b<<16|g<<8|r
 		}
+
+		
 		
 		// Generate texture
 		texture = GL30.glGenTextures();

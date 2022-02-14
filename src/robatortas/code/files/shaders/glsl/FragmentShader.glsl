@@ -19,6 +19,6 @@ void main(void) {
 	out_Color = texture(textureSampler, passTextureCoords);
 
 	// Fill
-//	out_Color = vec4(color, 1.0);
+	out_Color = vec4(color, 1.0);
 
 }

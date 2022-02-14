@@ -1,10 +1,14 @@
 package robatortas.code.files;
 
+import java.util.Random;
+
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.vector.Vector3f;
 
+import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.TexturedModel;
@@ -20,6 +24,8 @@ public class DisplayManager {
 	
 	public Loader loader = new Loader();
 	public Renderer renderer = new Renderer();
+	
+	public Random random = new Random();
 	
 	public void create() {
 		window();
@@ -72,30 +78,97 @@ public class DisplayManager {
 		
 		// Vertices
 		float[] vertices = {
-			// 0
-			-0.5f, 0.5f, 0,
-			// 1
-			-0.5f, -0.5f, 0,
-			// 3
-			0.5f, -0.5f, 0,
-			// 1 && 2 (connects 1 with 2)
-			0.5f, 0.5f, 0
+//			// 0
+//			-0.5f, 0.5f, 0,
+//			// 1
+//			-0.5f, -0.5f, 0,
+//			// 3
+//			0.5f, -0.5f, 0,
+//			// 1 && 2 (connects 1 with 2)
+//			0.5f, 0.5f, 0
+				
+				-0.5f,0.5f,0,
+				-0.5f,-0.5f,0,
+				0.5f,-0.5f,0,
+				0.5f,0.5f,0,
+				
+				-0.5f,0.5f,1,
+				-0.5f,-0.5f,1,
+				0.5f,-0.5f,1,
+				0.5f,0.5f,1,
+				
+				0.5f,0.5f,0,
+				0.5f,-0.5f,0,
+				0.5f,-0.5f,1,	
+				0.5f,0.5f,1,
+				
+				-0.5f,0.5f,0,
+				-0.5f,-0.5f,0,
+				-0.5f,-0.5f,1,
+				-0.5f,0.5f,1,
+				
+				-0.5f,0.5f,1,
+				-0.5f,0.5f,0,
+				0.5f,0.5f,0,
+				0.5f,0.5f,1,
+				
+				-0.5f,-0.5f,1,
+				-0.5f,-0.5f,0,
+				0.5f,-0.5f,0,
+				0.5f,-0.5f,1
 		};
 		
 		// Marks where each vertex is (in a weird way to bind them :D)
 		int[] indices = {
-				0, 1, 3,
-				3, 1, 2
+//				0, 1, 3,
+//				3, 1, 2
+				
+				0,1,3,	
+				3,1,2,	
+				4,5,7,
+				7,5,6,
+				8,9,11,
+				11,9,10,
+				12,13,15,
+				15,13,14,	
+				16,17,19,
+				19,17,18,
+				20,21,23,
+				23,21,22
 		};
 		
 		float[] uvMapping = {
-				0, 0, // V0
-				0, 1, // V1
-				1, 1, // V2
-				1, 0 // V3
+//				0, 0, // V0
+//				0, 1, // V1
+//				1, 1, // V2
+//				1, 0 // V3
+				
+				0,0,
+				0,1,
+				1,1,
+				1,0,			
+				0,0,
+				0,1,
+				1,1,
+				1,0,			
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0,
+				0,0,
+				0,1,
+				1,1,
+				1,0
 		};
 		
-		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GL30.glActiveTexture(GL30.GL_TEXTURE1);
 		GL30.glEnable(GL30.GL_BLEND);
 		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
@@ -105,13 +178,20 @@ public class DisplayManager {
 		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, uvMapping, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/chicken.png")); ///textures/wonder-day-among-us-21.png
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/face.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
+		Entity entity = new Entity(texturedModel, new Vector3f(0,0,0),0,0,0,1);
+		Entity entity2 = new Entity(texturedModel, new Vector3f(0,0,0),0,0,0,1);
+		
 		while(!shouldClose()) {
+			entity.move(0, 0, 0);
+			entity.rotate(0.3f, 0, 0.3f);
+			entity2.rotate(0.7f, 0, 0.7f);
 			renderer.update();
 			shader.start();
-			renderer.render(texturedModel);
+			renderer.render(entity, shader);
+//			renderer.render(entity2, shader);
 			shader.stop();
 			update();
 		}
@@ -124,6 +204,7 @@ public class DisplayManager {
 	
 	public void update() {
 //		GL30.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GLFW.glfwSwapBuffers(window);
 		GLFW.glfwPollEvents();
 	}

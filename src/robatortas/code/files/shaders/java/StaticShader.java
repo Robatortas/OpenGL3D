@@ -1,13 +1,15 @@
 package robatortas.code.files.shaders.java;
 
-import org.joml.Matrix4f;
+import org.lwjgl.util.vector.Matrix4f;
 
 import robatortas.code.files.shaders.ShaderProgram;
 
 public class StaticShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "./src/robatortas/code/files/shaders/glsl/VertexShader.glsl";
-	private static final String FRAGMENT_FILE = "./src/robatortas/code/files/shaders/glsl/FragmentShader.glsl";
+	// This class is to load stuff to the shader :D
+	
+	private static final String VERTEX_FILE = "src/robatortas/code/files/shaders/glsl/VertexShader.glsl";
+	private static final String FRAGMENT_FILE = "src/robatortas/code/files/shaders/glsl/FragmentShader.glsl";
 	
 	private int location_transformationMatrix;
 	
@@ -24,6 +26,7 @@ public class StaticShader extends ShaderProgram {
 	
 	// Gets uniform locations by inputting the string name of the exact uniform variable
 	protected void getAllUniformLocations() {
+		// Stores it
 		super.getUniformLocation("transformationMatrix");
 	}
 	
