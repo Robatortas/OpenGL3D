@@ -27,10 +27,10 @@ public class StaticShader extends ShaderProgram {
 	// Gets uniform locations by inputting the string name of the exact uniform variable
 	protected void getAllUniformLocations() {
 		// Stores it
-		super.getUniformLocation("transformationMatrix");
+		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
 	}
 	
-	// Loads transformation Matrix
+	// Loads transformation Matrix to the shader
 	public void loadTransformationMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_transformationMatrix, matrix);
 	}

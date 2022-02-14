@@ -168,26 +168,24 @@ public class DisplayManager {
 				1,1,
 				1,0
 		};
-		
-		GL30.glActiveTexture(GL30.GL_TEXTURE1);
-		GL30.glEnable(GL30.GL_BLEND);
-		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
-		
-		GL30.glEnable(GL30.GL_TEXTURE_2D);
+		GL30.glViewport(0,0, WIDTH, HEIGHT);
+//		GL30.glActiveTexture(GL30.GL_TEXTURE1);
+//		GL30.glEnable(GL30.GL_BLEND);
+//		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+//		
+//		GL30.glEnable(GL30.GL_TEXTURE_2D);
 		
 		StaticShader shader = new StaticShader();
 		
 		Model model = loader.loadToVAO(vertices, uvMapping, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/face.png")); ///textures/wonder-day-among-us-21.png
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/crate.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		Entity entity = new Entity(texturedModel, new Vector3f(0,0,0),0,0,0,1);
-		Entity entity2 = new Entity(texturedModel, new Vector3f(0,0,0),0,0,0,1);
 		
 		while(!shouldClose()) {
 			entity.move(0, 0, 0);
-			entity.rotate(0.3f, 0, 0.3f);
-			entity2.rotate(0.7f, 0, 0.7f);
+			entity.rotate(0, 1, 1);
 			renderer.update();
 			shader.start();
 			renderer.render(entity, shader);
@@ -204,7 +202,6 @@ public class DisplayManager {
 	
 	public void update() {
 //		GL30.glClear(GL30.GL_COLOR_BUFFER_BIT);
-		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GLFW.glfwSwapBuffers(window);
 		GLFW.glfwPollEvents();
 	}

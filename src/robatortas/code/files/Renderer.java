@@ -16,8 +16,9 @@ public class Renderer {
 	
 	// Prepares OpenGL to render game
 	public void update() {
-		GL11.glClearColor(0.5f, 0.5f, 1, 1);
+		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GL11.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
+		GL11.glClearColor(0.5f, 0.5f, 1, 1);
 	}
 	
 	/* Shader so that we can upload the entities transformation, so it renders the entity model in a different position
