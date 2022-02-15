@@ -1,13 +1,15 @@
 package robatortas.code.files;
 
+import java.awt.Canvas;
 import java.util.Random;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.vector.Vector3f;
 
+import robatortas.code.files.Input.KeyInput;
+import robatortas.code.files.entities.Camera;
 import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
@@ -15,17 +17,21 @@ import robatortas.code.files.models.TexturedModel;
 import robatortas.code.files.shaders.java.StaticShader;
 import robatortas.code.files.textures.ModelTexture;
 
-public class DisplayManager {
+public class DisplayManager extends Canvas{
 	
+	private static final long serialVersionUID = 1L;
+
 	public long window;
 	
 	private int WIDTH = 1024;
 	private int HEIGHT = 720;
 	
 	public Loader loader = new Loader();
-	public Renderer renderer = new Renderer();
 	
 	public Random random = new Random();
+	
+	private KeyInput input;
+	
 	
 	public void create() {
 		window();
@@ -33,7 +39,6 @@ public class DisplayManager {
 	
 	public void window() {
 		GLFW.glfwInit();
-		
 		
 		window = GLFW.glfwCreateWindow(getWidth(), getHeight(), "OPENGL3D", MemoryUtil.NULL, MemoryUtil.NULL);
 		
@@ -168,7 +173,7 @@ public class DisplayManager {
 				1,1,
 				1,0
 		};
-		GL30.glViewport(0,0, WIDTH, HEIGHT);
+//		GL30.glViewport(0,0, GLFW.glfwGetWindowSize(window, null, null);, HEIGHT);
 //		GL30.glActiveTexture(GL30.GL_TEXTURE1);
 //		GL30.glEnable(GL30.GL_BLEND);
 //		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
@@ -176,18 +181,26 @@ public class DisplayManager {
 //		GL30.glEnable(GL30.GL_TEXTURE_2D);
 		
 		StaticShader shader = new StaticShader();
+		Renderer renderer = new Renderer(shader);
 		
 		Model model = loader.loadToVAO(vertices, uvMapping, indices);
 		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/crate.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0,0,0),0,0,0,1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1),0,0,0,1);
+		
+		input = new KeyInput();
+		addKeyListener(input);
+		
+		Camera camera = new Camera(input);
 		
 		while(!shouldClose()) {
-			entity.move(0, 0, 0);
+			entity.move(0, 0, -0.0008f);
 			entity.rotate(0, 1, 1);
+			camera.move(window);
 			renderer.update();
 			shader.start();
+			shader.loadViewMatrix(camera);
 			renderer.render(entity, shader);
 //			renderer.render(entity2, shader);
 			shader.stop();

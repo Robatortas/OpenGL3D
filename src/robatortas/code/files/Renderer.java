@@ -14,6 +14,16 @@ public class Renderer {
 	
 	// NOTE: If you want to change a VAO or VBO, you NEED TO BIND IT!
 	
+	private Matrix4f projectionMatrix = new Matrix4f();
+	
+	public Renderer(StaticShader shader) {
+		createProjectionMatrix();
+		GL30.glEnablei(GL30.GL_PROJECTION, 1);
+		shader.start();
+		shader.loadProjectionMatrix(projectionMatrix);
+		shader.stop();
+	}
+	
 	// Prepares OpenGL to render game
 	public void update() {
 		GL30.glEnable(GL30.GL_DEPTH_TEST);
@@ -35,6 +45,7 @@ public class Renderer {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		// Loads transformationMatrix to the shader
 		shader.loadTransformationMatrix(transformationMatrix);
+		// Loads the textures to the shader
 		GL30.glActiveTexture(GL30.GL_TEXTURE0);
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texturedModel.getTexture().getID());
 		// Draws elements
@@ -44,5 +55,26 @@ public class Renderer {
 		GL30.glDisableVertexAttribArray(1);
 		// Deselects the array
 		GL30.glBindVertexArray(0);
+	}
+	
+	private DisplayManager display = new DisplayManager();
+	
+	private static final float FOV = 80;
+	private static final float NEAR_PLANE = 0.1f;
+	private static final float FAR_PLANE = 1000;
+	
+	private void createProjectionMatrix() {
+		float aspectRatio = display.getWidth() / display.getHeight();
+		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
+		float x_scale = y_scale / aspectRatio;
+		float frustum_length = FAR_PLANE - NEAR_PLANE;
+
+		projectionMatrix = new Matrix4f();
+		projectionMatrix.m00 = x_scale;
+		projectionMatrix.m11 = y_scale;
+		projectionMatrix.m22 = -((FAR_PLANE + NEAR_PLANE) / frustum_length);
+		projectionMatrix.m23 = -1;
+		projectionMatrix.m32 = -((2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
+		projectionMatrix.m33 = 0;
 	}
 }

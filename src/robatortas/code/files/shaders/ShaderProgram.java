@@ -85,14 +85,14 @@ public abstract class ShaderProgram {
 		StringBuilder shaderSource = new StringBuilder();
 		
 		try {
-			@SuppressWarnings("resource")
-			BufferedReader reader = new BufferedReader(new FileReader(file));
-			// Temp line
-			String buffer;
-			// While the file still isn't fully read.
-			// readLine() advances to the next line
-			while((buffer = reader.readLine()) != null) {
-				shaderSource.append(buffer).append("\n");
+			try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+				// Temp line
+				String buffer;
+				// While the file still isn't fully read.
+				// readLine() advances to the next line
+				while((buffer = reader.readLine()) != null) {
+					shaderSource.append(buffer).append("\n");
+				}
 			}
 		} catch (IOException e) {
 			System.err.println("Unable to read file");
