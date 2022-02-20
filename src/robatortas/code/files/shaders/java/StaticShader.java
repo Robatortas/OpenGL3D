@@ -39,6 +39,7 @@ public class StaticShader extends ShaderProgram {
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
 	}
 	
+	// Loads viewMatrix to the shader
 	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);

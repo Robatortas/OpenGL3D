@@ -99,7 +99,7 @@ public class DisplayManager extends Canvas{
 		Cube cube = new Cube();
 		
 		Model model = ObjLoader.load("res/models/myModel/myModel.obj", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/grass_block.png")); ///textures/wonder-day-among-us-21.png
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/models/myModel/sampleTexture.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
 		Entity entity = new Entity(texturedModel, new Vector3f(0,0,-5f),0,0,0,1);
@@ -110,13 +110,21 @@ public class DisplayManager extends Canvas{
 		Camera camera = new Camera(input);
 		
 		while(!shouldClose()) {
+			
+			System.out.println(model.getVertexCount());
+			
+			if(input.semicolon) {
+				GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
+			}
+			
 			entity.move(0, 0, -0.0000f);
 			entity.rotate(0, 1, 0);
 			camera.move(window);
 			renderer.update();
 			shader.start();
-			shader.loadViewMatrix(camera);
 			renderer.render(entity, shader);
+
+			shader.loadViewMatrix(camera);
 			shader.stop();
 			update();
 		}

@@ -19,7 +19,7 @@ uniform mat4 viewMatrix;
 void main(void){
 	// Tells OpenGL the positions of each vertex in the VAO
 	// A vector is a 1 by 4 matrix too btw
-	gl_Position = viewMatrix * projectionMatrix * transformationMatrix * vec4(position, 1.5); //transformationMatrix*
+	gl_Position = projectionMatrix * viewMatrix * transformationMatrix * vec4(position, 1.0); //transformationMatrix*
 	// passTextureCoords is equal to textureCoords
 	passTextureCoords = textureCoords;
 

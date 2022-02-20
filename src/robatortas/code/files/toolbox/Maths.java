@@ -28,10 +28,10 @@ public class Maths {
 		// Sets every matrix value to 0.0f
 		viewMatrix.setIdentity();
 		// Rotates
-		Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), viewMatrix,
-				viewMatrix);
+		Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);
 		Matrix4f.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
 		
+		// Gets the camera position from the getPosition() method in camera
 		Vector3f cameraPos = camera.getPosition();
 		// Negative because we are moving the world the opposite direction from the camera input
 		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);

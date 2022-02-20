@@ -1,9 +1,11 @@
 package robatortas.code.files;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 
+import robatortas.code.files.Input.KeyInput;
 import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.TexturedModel;
@@ -11,6 +13,8 @@ import robatortas.code.files.shaders.java.StaticShader;
 import robatortas.code.files.toolbox.Maths;
 
 public class Renderer {
+	
+	private KeyInput input;
 	
 	// NOTE: If you want to change a VAO or VBO, you NEED TO BIND IT!
 	
@@ -26,9 +30,12 @@ public class Renderer {
 	
 	// Prepares OpenGL to render game
 	public void update() {
+		GL30.glEnable(GL30.GL_CULL_FACE);
+		GL30.glCullFace(GL30.GL_BACK);
 		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GL11.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(0.5f, 0.5f, 1, 1);
+		input = new KeyInput();
 	}
 	
 	/* Shader so that we can upload the entities transformation, so it renders the entity model in a different position
@@ -50,7 +57,7 @@ public class Renderer {
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texturedModel.getTexture().getID());
 		// Draws elements
 		GL30.glDrawElements(GL30.GL_TRIANGLES, model.getVertexCount(), GL30.GL_UNSIGNED_INT, 0);
-		// Disables attrib list once we're done on attribList 0
+		// Disables attrib list once we're done on the attribLists
 		GL30.glDisableVertexAttribArray(0);
 		GL30.glDisableVertexAttribArray(1);
 		// Deselects the array
