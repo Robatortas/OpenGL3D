@@ -1,4 +1,4 @@
-package robatortas.code.files.toolbov;
+package robatortas.code.files.toolbox;
 
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
@@ -25,14 +25,17 @@ public class Maths {
 	// Makes the moving camera effect
 	public static Matrix4f createViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = new Matrix4f();
+		// Sets every matrix value to 0.0f
 		viewMatrix.setIdentity();
 		// Rotates
 		Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), viewMatrix,
 				viewMatrix);
 		Matrix4f.rotate((float) Math.toRadians(camera.getYaw()), new Vector3f(0, 1, 0), viewMatrix, viewMatrix);
+		
 		Vector3f cameraPos = camera.getPosition();
 		// Negative because we are moving the world the opposite direction from the camera input
 		Vector3f negativeCameraPos = new Vector3f(-cameraPos.x,-cameraPos.y,-cameraPos.z);
+		// Translates the matrix
 		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
 		return viewMatrix;
 	}

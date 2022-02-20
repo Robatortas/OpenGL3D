@@ -15,9 +15,9 @@ void main(void) {
 	//in the coordinates for the point on the texture that wants to be sampled
 
 	// Returns color of the pixel on the texture at the coords that we give it
-	out_Color = (texture(textureSampler, passTextureCoords)*1.5); // vec4(color,1.0);
+//	out_Color = (texture(textureSampler, passTextureCoords)*1); // vec4(color,1.0);
 
 	// Fill
-//	out_Color = vec4(color, 1.0);
+	out_Color = vec4(color, 1.0);
 
 }

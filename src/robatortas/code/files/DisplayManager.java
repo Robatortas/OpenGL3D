@@ -5,6 +5,7 @@ import java.util.Random;
 
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -13,7 +14,9 @@ import robatortas.code.files.entities.Camera;
 import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
+import robatortas.code.files.models.ObjLoader;
 import robatortas.code.files.models.TexturedModel;
+import robatortas.code.files.models.shapes.Cube;
 import robatortas.code.files.shaders.java.StaticShader;
 import robatortas.code.files.textures.ModelTexture;
 
@@ -81,99 +84,9 @@ public class DisplayManager extends Canvas{
 		 *		------------>
 		 */
 		
-		// Vertices
-		float[] vertices = {
-//			// 0
-//			-0.5f, 0.5f, 0,
-//			// 1
-//			-0.5f, -0.5f, 0,
-//			// 3
-//			0.5f, -0.5f, 0,
-//			// 1 && 2 (connects 1 with 2)
-//			0.5f, 0.5f, 0
-				
-				-0.5f,0.5f,0,
-				-0.5f,-0.5f,0,
-				0.5f,-0.5f,0,
-				0.5f,0.5f,0,
-				
-				-0.5f,0.5f,1,
-				-0.5f,-0.5f,1,
-				0.5f,-0.5f,1,
-				0.5f,0.5f,1,
-				
-				0.5f,0.5f,0,
-				0.5f,-0.5f,0,
-				0.5f,-0.5f,1,	
-				0.5f,0.5f,1,
-				
-				-0.5f,0.5f,0,
-				-0.5f,-0.5f,0,
-				-0.5f,-0.5f,1,
-				-0.5f,0.5f,1,
-				
-				-0.5f,0.5f,1,
-				-0.5f,0.5f,0,
-				0.5f,0.5f,0,
-				0.5f,0.5f,1,
-				
-				-0.5f,-0.5f,1,
-				-0.5f,-0.5f,0,
-				0.5f,-0.5f,0,
-				0.5f,-0.5f,1
-		};
-		
 		// Marks where each vertex is (in a weird way to bind them :D)
-		int[] indices = {
-//				0, 1, 3,
-//				3, 1, 2
-				
-				0,1,3,	
-				3,1,2,	
-				4,5,7,
-				7,5,6,
-				8,9,11,
-				11,9,10,
-				12,13,15,
-				15,13,14,	
-				16,17,19,
-				19,17,18,
-				20,21,23,
-				23,21,22
-		};
 		
-		float[] uvMapping = {
-//				0, 0, // V0
-//				0, 1, // V1
-//				1, 1, // V2
-//				1, 0 // V3
-				
-				0,0,
-				0,1,
-				1,1,
-				1,0,			
-				0,0,
-				0,1,
-				1,1,
-				1,0,			
-				0,0,
-				0,1,
-				1,1,
-				1,0,
-				0,0,
-				0,1,
-				1,1,
-				1,0,
-				0,0,
-				0,1,
-				1,1,
-				1,0,
-				0,0,
-				0,1,
-				1,1,
-				1,0
-		};
-//		GL30.glViewport(0,0, GLFW.glfwGetWindowSize(window, null, null);, HEIGHT);
+		GL30.glViewport(0, 0, WIDTH, HEIGHT);
 //		GL30.glActiveTexture(GL30.GL_TEXTURE1);
 //		GL30.glEnable(GL30.GL_BLEND);
 //		GL30.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
@@ -183,11 +96,13 @@ public class DisplayManager extends Canvas{
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer(shader);
 		
-		Model model = loader.loadToVAO(vertices, uvMapping, indices);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/crate.png")); ///textures/wonder-day-among-us-21.png
+		Cube cube = new Cube();
+		
+		Model model = ObjLoader.load("res/models/myModel/myModel.obj", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/grass_block.png")); ///textures/wonder-day-among-us-21.png
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0,0,-1),0,0,0,1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0,0,-5f),0,0,0,1);
 		
 		input = new KeyInput();
 		addKeyListener(input);
@@ -195,14 +110,13 @@ public class DisplayManager extends Canvas{
 		Camera camera = new Camera(input);
 		
 		while(!shouldClose()) {
-			entity.move(0, 0, -0.0008f);
-			entity.rotate(0, 1, 1);
+			entity.move(0, 0, -0.0000f);
+			entity.rotate(0, 1, 0);
 			camera.move(window);
 			renderer.update();
 			shader.start();
 			shader.loadViewMatrix(camera);
 			renderer.render(entity, shader);
-//			renderer.render(entity2, shader);
 			shader.stop();
 			update();
 		}

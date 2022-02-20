@@ -4,7 +4,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import robatortas.code.files.entities.Camera;
 import robatortas.code.files.shaders.ShaderProgram;
-import robatortas.code.files.toolbov.Maths;
+import robatortas.code.files.toolbox.Maths;
 
 public class StaticShader extends ShaderProgram {
 
@@ -24,6 +24,9 @@ public class StaticShader extends ShaderProgram {
 	protected void bindAttribs() {
 		// 0 because our VAO is located on 0
 		// "position" so OpenGL knows what the in position is on the shader file
+		
+		// OpenGL knows the data of info because it's binding all the data on VAO 0
+		// Hence the 0 on the input
 		super.bindAttrib(0, "position");
 		super.bindAttrib(1, "textureCoords");
 	}

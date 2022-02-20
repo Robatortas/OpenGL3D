@@ -8,7 +8,7 @@ import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.TexturedModel;
 import robatortas.code.files.shaders.java.StaticShader;
-import robatortas.code.files.toolbov.Maths;
+import robatortas.code.files.toolbox.Maths;
 
 public class Renderer {
 	
