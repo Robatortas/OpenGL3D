@@ -1,6 +1,5 @@
 package robatortas.code.files;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
@@ -10,6 +9,7 @@ import robatortas.code.files.entities.Entity;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.TexturedModel;
 import robatortas.code.files.shaders.java.StaticShader;
+import robatortas.code.files.textures.ModelTexture;
 import robatortas.code.files.toolbox.Maths;
 
 public class Renderer {
@@ -53,6 +53,9 @@ public class Renderer {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		// Loads transformationMatrix to the shader
 		shader.loadTransformationMatrix(transformationMatrix);
+		
+		ModelTexture texture = texturedModel.getTexture();
+		shader.loadSpecular(texture.getReflectivity(), texture.getReflecDamper());
 		// Loads the textures to the shader
 		GL30.glActiveTexture(GL30.GL_TEXTURE0);
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, texturedModel.getTexture().getID());

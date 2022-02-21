@@ -13,6 +13,8 @@ out vec3 surfaceNormal;
 out vec3 toLightVector;
 out vec3 color;
 
+out vec3 cameraPosition;
+
 uniform mat4 transformationMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
@@ -30,6 +32,8 @@ void main(void){
 
 	surfaceNormal = (transformationMatrix * vec4(normal, 0.0)).xyz;
 	toLightVector = lightPosition - worldPosition.xyz;
+
+	cameraPosition = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
 
 	// Fill
 	color = vec3(position.x+0.5, position.y+0.5, position.z+0.5);

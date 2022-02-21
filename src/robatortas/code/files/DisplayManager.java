@@ -100,8 +100,12 @@ public class DisplayManager extends Canvas{
 		Cube cube = new Cube();
 		
 		Model model = ObjLoader.load("res/models/pascal/pascal.obj", loader);//ObjLoader.load("res/models/myModel/myModel.obj", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/default.png")); ///textures/grass_block.png  "/models/myModel/sampleTexture.png"
-		TexturedModel texturedModel = new TexturedModel(model, texture);
+		TexturedModel texturedModel = new TexturedModel(model, new ModelTexture(loader.loadTexture("/textures/default.png")));
+		
+		ModelTexture texture = texturedModel.getTexture();//new ModelTexture(loader.loadTexture("/textures/default.png")); ///textures/grass_block.png  "/models/myModel/sampleTexture.png"
+		
+		texture.setReflecDamper(100);
+		texture.setReflectivity(100);
 		
 		Entity entity = new Entity(texturedModel, new Vector3f(0,-0.3f,-5f),0,0,0,0.2f);
 		
