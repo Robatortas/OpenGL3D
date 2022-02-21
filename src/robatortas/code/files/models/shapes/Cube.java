@@ -137,4 +137,11 @@ public class Cube {
 			1,0.5f,
 			1f,0,
 	};
+	
+	// TODO: FINISH THIS BULLSHIT!
+	public float[] normals = {
+			// Sides
+			0f,1f,0f,
+			0f,1f,0f
+	};
 }

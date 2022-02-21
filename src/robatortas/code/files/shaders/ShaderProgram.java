@@ -21,7 +21,7 @@ public abstract class ShaderProgram {
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(4*4);
 	
 	public ShaderProgram(String vertexFile, String fragmentFile) {
-		// Loads Shaders with the file directories
+		// Loads shaders with the file directories
 		vertexShaderID = loadShader(vertexFile, GL30.GL_VERTEX_SHADER);
 		fragmentShaderID = loadShader(fragmentFile, GL30.GL_FRAGMENT_SHADER);
 		// Creates Shader program
@@ -118,17 +118,19 @@ public abstract class ShaderProgram {
 		}
 		return shaderID;
 	}
-	
-	// Loads a float from a shader class for usability in java
+
+	// Loads a float from java code to the shader
 	protected void loadFloat(int location, float value) {
 		GL30.glUniform1f(location, value);
 	}
 	
-	// Loads a vector from a shader class for usability in java
+	// Loads a vector from java code to the shader
 	protected void loadVector(int location, Vector3f vector) {
+		// Gives the location it's values that it'll be using in the shader
 		GL30.glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 	
+	// Loads a boolean from java code to the shader
 	protected void loadBoolean(int location, boolean value) {
 		float toLoad = 0;
 		if(value) {
@@ -136,14 +138,14 @@ public abstract class ShaderProgram {
 		}
 		GL30.glUniform1f(location, toLoad);
 	}
-	
-	// Loads matrix
+
+	// Loads a matrix from java code to the shader
 	protected void loadMatrix(int location, Matrix4f matrix) {
 		// Gets the buffer data to the matrix
 		matrix.store(matrixBuffer);
 		// Prepares to be read from
 		matrixBuffer.flip();
-		// Creates a 4f matrix with the data we give it and loads it to the shader
+		// Creates a 4f matrix with the data it's give and loads it to the shader
 		GL30.glUniformMatrix4fv(location, false, matrixBuffer);
 	}
 }

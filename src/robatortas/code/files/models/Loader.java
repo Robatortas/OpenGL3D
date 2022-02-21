@@ -31,7 +31,7 @@ public class Loader {
 	private List<Integer> textures = new ArrayList<Integer>();
 	
 	// Takes in positions of the model's vertices and returns info as a Model Object.
-	public Model loadToVAO(float[] positions, float[] textureCoords, int[] indices) {
+	public Model loadToVAO(float[] positions, float[] textureCoords, float[] normals, int[] indices) {
 		int vaoID = createVAO();
 		// Data is in attribList 0!
 		// AttribLists are all the attributes that a vertex contains, like the position or the color of the vertex
@@ -40,6 +40,7 @@ public class Loader {
 		// attrib 1 = texture VAO
 		// 2 because it's only a 2 float vertex (x, y)
 		storeDataInAttribList(1, 2, textureCoords);
+		storeDataInAttribList(2, 3, normals);
 		bindIndicesBuffer(indices);
 		unbindVAO();
 		// 3 because each vertex has 3 floats (AKA: positions) which are: X,Y,Z

@@ -107,7 +107,7 @@ public class ObjLoader {
 		}
 		
 		// Returns a VAO with all the vertex, texture and index data
-		return loader.loadToVAO(verticesArray, textureArray, indicesArray);
+		return loader.loadToVAO(verticesArray, textureArray, normalsArray, indicesArray);
 	}
 
 	// Processes the vertex and adds makes textures, indices and normals be in pair with the current processed vertex

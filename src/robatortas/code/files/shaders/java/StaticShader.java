@@ -3,6 +3,7 @@ package robatortas.code.files.shaders.java;
 import org.lwjgl.util.vector.Matrix4f;
 
 import robatortas.code.files.entities.Camera;
+import robatortas.code.files.entities.Light;
 import robatortas.code.files.shaders.ShaderProgram;
 import robatortas.code.files.toolbox.Maths;
 
@@ -16,11 +17,14 @@ public class StaticShader extends ShaderProgram {
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
+	private int location_lightPosition;
+	private int location_lightColor;
 	
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
 	
+	// binds attrib to a certain variable in the vertex shader
 	protected void bindAttribs() {
 		// 0 because our VAO is located on 0
 		// "position" so OpenGL knows what the in position is on the shader file
@@ -29,14 +33,17 @@ public class StaticShader extends ShaderProgram {
 		// Hence the 0 on the input
 		super.bindAttrib(0, "position");
 		super.bindAttrib(1, "textureCoords");
+		super.bindAttrib(2, "normal");
 	}
 	
 	// Gets uniform locations by inputting the string name of the exact uniform variable
 	protected void getAllUniformLocations() {
-		// Stores the uniform to the location_transformationMatrix variable
+		// Stores the uniform's location to the location_transformationMatrix variable
 		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
+		location_lightPosition = super.getUniformLocation("lightPosition");
+		location_lightColor = super.getUniformLocation("lightColor");
 	}
 	
 	// Loads viewMatrix to the shader
@@ -53,5 +60,13 @@ public class StaticShader extends ShaderProgram {
 	// Loads projection Matrix to the shader
 	public void loadProjectionMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_projectionMatrix, matrix);
+	}
+
+	// Loads light to the shader
+	public void loadLight(Light light) {
+		// location_lightPosition gets the x,y,z positions from the light.getPosition()
+		// and location_lightPosition gives the value to the lightPosition from the vertex shader
+		super.loadVector(location_lightPosition, light.getPosition());
+		super.loadVector(location_lightColor, light.getColor());
 	}
 }

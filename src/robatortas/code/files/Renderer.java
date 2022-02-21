@@ -21,6 +21,8 @@ public class Renderer {
 	private Matrix4f projectionMatrix = new Matrix4f();
 	
 	public Renderer(StaticShader shader) {
+		GL30.glEnable(GL30.GL_CULL_FACE);
+		GL30.glCullFace(GL30.GL_BACK);
 		createProjectionMatrix();
 		GL30.glEnablei(GL30.GL_PROJECTION, 1);
 		shader.start();
@@ -30,8 +32,6 @@ public class Renderer {
 	
 	// Prepares OpenGL to render game
 	public void update() {
-		GL30.glEnable(GL30.GL_CULL_FACE);
-		GL30.glCullFace(GL30.GL_BACK);
 		GL30.glEnable(GL30.GL_DEPTH_TEST);
 		GL11.glClear(GL30.GL_COLOR_BUFFER_BIT | GL30.GL_DEPTH_BUFFER_BIT);
 		GL11.glClearColor(0.5f, 0.5f, 1, 1);
@@ -48,6 +48,7 @@ public class Renderer {
 		// Activates attribList where data is stored
 		GL30.glEnableVertexAttribArray(0);
 		GL30.glEnableVertexAttribArray(1);
+		GL30.glEnableVertexAttribArray(2);
 		// Matrix
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		// Loads transformationMatrix to the shader
@@ -60,6 +61,7 @@ public class Renderer {
 		// Disables attrib list once we're done on the attribLists
 		GL30.glDisableVertexAttribArray(0);
 		GL30.glDisableVertexAttribArray(1);
+		GL30.glDisableVertexAttribArray(2);
 		// Deselects the array
 		GL30.glBindVertexArray(0);
 	}

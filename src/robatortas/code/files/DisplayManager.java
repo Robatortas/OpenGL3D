@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector3f;
 import robatortas.code.files.Input.KeyInput;
 import robatortas.code.files.entities.Camera;
 import robatortas.code.files.entities.Entity;
+import robatortas.code.files.entities.Light;
 import robatortas.code.files.models.Loader;
 import robatortas.code.files.models.Model;
 import robatortas.code.files.models.ObjLoader;
@@ -98,11 +99,13 @@ public class DisplayManager extends Canvas{
 		
 		Cube cube = new Cube();
 		
-		Model model = ObjLoader.load("res/models/myModel/myModel.obj", loader);
-		ModelTexture texture = new ModelTexture(loader.loadTexture("/models/myModel/sampleTexture.png")); ///textures/wonder-day-among-us-21.png
+		Model model = ObjLoader.load("res/models/pascal/pascal.obj", loader);//ObjLoader.load("res/models/myModel/myModel.obj", loader);
+		ModelTexture texture = new ModelTexture(loader.loadTexture("/textures/default.png")); ///textures/grass_block.png  "/models/myModel/sampleTexture.png"
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0,0,-5f),0,0,0,1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0,-0.3f,-5f),0,0,0,0.2f);
+		
+		Light light = new Light(new Vector3f(5, 5, 0), new Vector3f(1,1,1));
 		
 		input = new KeyInput();
 		addKeyListener(input);
@@ -110,8 +113,6 @@ public class DisplayManager extends Canvas{
 		Camera camera = new Camera(input);
 		
 		while(!shouldClose()) {
-			
-			System.out.println(model.getVertexCount());
 			
 			if(input.semicolon) {
 				GL30.glPolygonMode(GL30.GL_FRONT_AND_BACK, GL30.GL_LINE);
@@ -123,7 +124,7 @@ public class DisplayManager extends Canvas{
 			renderer.update();
 			shader.start();
 			renderer.render(entity, shader);
-
+			shader.loadLight(light);
 			shader.loadViewMatrix(camera);
 			shader.stop();
 			update();
