@@ -36,17 +36,18 @@ void main(void) {
 	float brightness = max(nDot1, 0.2);
 	vec3 diffuse = brightness * lightColor;
 
-	// vector pointing to camera
+	// Vector pointing to camera
 	vec3 camera = normalize(cameraPosition);
 	// light direction vector
 	vec3 lightDirection = -unitLightVector;
-	// returns the reflected light direction (basically the reflection ray of the normal)
+	// Returns the reflected light direction (basically the reflection ray of the normal)
 	vec3 reflectedDirection = reflect(lightDirection, unitNormal);
 	// Calculates how far the camera ray is from the reflected ray
 	float specularFactor = dot(reflectedDirection, camera);
 	specularFactor = max(specularFactor, 0.0);
+
 	float dampening = pow(specularFactor, reflecDamper);
-	vec3 finalSpecular = dampening * lightColor;
+	vec3 finalSpecular = dampening*reflectivity*lightColor;
 
 	// Special GLSL method, takes in text we want to sample and takes
 	//in the coordinates for the point on the texture that wants to be sampled

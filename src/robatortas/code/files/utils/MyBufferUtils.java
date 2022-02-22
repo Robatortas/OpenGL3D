@@ -1,6 +1,7 @@
 package robatortas.code.files.utils;
 
 import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -47,6 +48,13 @@ public class MyBufferUtils {
 	}
 	public ByteBuffer createByteBuffer(byte data) {
 		ByteBuffer buffer = BufferUtils.createByteBuffer(data);
+		buffer.put(data);
+		buffer.flip();
+		return buffer;
+	}
+
+	public static DoubleBuffer createDoubleBuffer(double data) {
+		DoubleBuffer buffer = BufferUtils.createDoubleBuffer((int) data);
 		buffer.put(data);
 		buffer.flip();
 		return buffer;

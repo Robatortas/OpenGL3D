@@ -3,6 +3,7 @@ package robatortas.code.files.entities;
 import org.lwjgl.util.vector.Vector3f;
 
 import robatortas.code.files.Input.KeyInput;
+import robatortas.code.files.Input.MouseInput;
 
 public class Camera {
 	
@@ -11,39 +12,49 @@ public class Camera {
 	private float yaw;
 	private float roll;
 	
-	private KeyInput input;
+	private KeyInput key;
+	private MouseInput mouse;
 	
-	public Camera(KeyInput input) {
-		this.input = input;
+	public Camera(KeyInput key, MouseInput mouse) {
+		this.key = key;
+		this.mouse = mouse;
 	}
 
 	public void move(long window) {
-		input.update(window);
-		if(input.w) {
+		key.update(window);
+		mouse.update(window);
+		
+		if(key.w) {
 			position.z-= 0.05f;
 		}
-		if(input.s) {
+		if(key.s) {
 			position.z += 0.05f;
 		}
-		if(input.a) {
+		if(key.a) {
 			position.x -= 0.05f;
 		}
-		if(input.d) {
+		if(key.d) {
 			position.x += 0.05f;
 		}
 		
-		if(input.up) {
+		if(key.up) {
 			pitch -= 1;
 		}
-		if(input.down) {
+		if(key.down) {
 			pitch += 1;
 		}
-		if(input.left) {
+		if(key.left) {
 			yaw -= 1;
 		}
-		if(input.right) {
+		if(key.right) {
 			yaw += 1;
 		}
+		
+		if(mouse.mouseButton == 0) {
+//			yaw += angleChange;
+			System.out.println(mouse.mouseDX);
+		}
+		
 	}
 	
 	// Used primarily to get the camera position in the viewMatrix

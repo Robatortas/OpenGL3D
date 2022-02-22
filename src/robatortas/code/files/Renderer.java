@@ -53,7 +53,7 @@ public class Renderer {
 		Matrix4f transformationMatrix = Maths.createTransformationMatrix(entity.getPosition(), entity.getRotX(), entity.getRotY(), entity.getRotZ(), entity.getScale());
 		// Loads transformationMatrix to the shader
 		shader.loadTransformationMatrix(transformationMatrix);
-		
+		// Load Specular
 		ModelTexture texture = texturedModel.getTexture();
 		shader.loadSpecular(texture.getReflectivity(), texture.getReflecDamper());
 		// Loads the textures to the shader

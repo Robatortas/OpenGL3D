@@ -51,6 +51,7 @@ public class StaticShader extends ShaderProgram {
 		location_reflecDamper = super.getUniformLocation("reflecDamper");
 	}
 	
+	// Loads specularLighting to the shader with the inputs given
 	public void loadSpecular(float reflectivity, float damper) {
 		super.loadFloat(location_reflectivity, reflectivity);
 		super.loadFloat(location_reflecDamper, damper);

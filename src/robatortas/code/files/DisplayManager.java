@@ -10,6 +10,7 @@ import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.vector.Vector3f;
 
 import robatortas.code.files.Input.KeyInput;
+import robatortas.code.files.Input.MouseInput;
 import robatortas.code.files.entities.Camera;
 import robatortas.code.files.entities.Entity;
 import robatortas.code.files.entities.Light;
@@ -27,15 +28,15 @@ public class DisplayManager extends Canvas{
 
 	public long window;
 	
-	private int WIDTH = 1024;
-	private int HEIGHT = 720;
+	public static int WIDTH = 1024;
+	public static int HEIGHT = 720;
 	
 	public Loader loader = new Loader();
 	
 	public Random random = new Random();
 	
 	private KeyInput input;
-	
+	private MouseInput mouse;
 	
 	public void create() {
 		window();
@@ -104,17 +105,21 @@ public class DisplayManager extends Canvas{
 		
 		ModelTexture texture = texturedModel.getTexture();//new ModelTexture(loader.loadTexture("/textures/default.png")); ///textures/grass_block.png  "/models/myModel/sampleTexture.png"
 		
-		texture.setReflecDamper(100);
-		texture.setReflectivity(100);
+		texture.setReflecDamper(1f);
+		texture.setReflectivity(0.1f);
 		
-		Entity entity = new Entity(texturedModel, new Vector3f(0,-0.3f,-5f),0,0,0,0.2f);
+		Entity entity = new Entity(texturedModel, new Vector3f(0,-0.3f,-5f),0,0,0,0.6f);
 		
 		Light light = new Light(new Vector3f(5, 5, 0), new Vector3f(1,1,1));
+
+		mouse = new MouseInput();
+		addMouseListener(mouse);
+		addMouseMotionListener(mouse);
 		
 		input = new KeyInput();
 		addKeyListener(input);
 		
-		Camera camera = new Camera(input);
+		Camera camera = new Camera(input, mouse);
 		
 		while(!shouldClose()) {
 			

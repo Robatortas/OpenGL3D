@@ -91,7 +91,6 @@ public class Loader {
 		// Unbind texture
 		GL30.glBindTexture(GL30.GL_TEXTURE_2D, 0);
 		
-		
 		// Adds the texture to the textures list
 		textures.add(texture);
 				
